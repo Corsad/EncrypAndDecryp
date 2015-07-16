@@ -48,11 +48,11 @@ public class Ceasar {
                     switch (mode) {
                         // mode encryp
                         case 1:
-                            encrypWithKey(Integer.parseInt(args[2]));
+                            encryptWithKey(Integer.parseInt(args[2]));
                             break;
                         // mode decryp
                         case 2:
-                            decrypWithKey(Integer.parseInt(args[2]));
+                            decryptWithKey(Integer.parseInt(args[2]));
                             break;
                     }
                 } else if (args.length == 2) {
@@ -63,7 +63,7 @@ public class Ceasar {
                             break;
                         // mode decryp
                         case 2:
-                            decrypWithoutKey();
+                            decryptWithoutKey();
                             break;
                     }
 
@@ -109,7 +109,7 @@ public class Ceasar {
         }
     }
 
-    public void encrypWithKey(int key) {
+    public void encryptWithKey(int key) {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
 
@@ -127,21 +127,21 @@ public class Ceasar {
             // Make set Char Array based on user key
             char[] newCharArray = new char[allChars.length];
             for (int i = 0; i < allChars.length; i++) {
-                // Moving to the right
+                // Moving to the left
                 // A B C D E
-                // D E A B C : Key = 2
-                if (i + key < allChars.length) {
-                    newCharArray[i] = allChars[i + key];
+                // C D E A B : key = 2
+                if (i - key < 0) {
+                    newCharArray[i] = allChars[allChars.length + i - key];
                 } else {
-                    newCharArray[i] = allChars[(i + key) - allChars.length];
+                    newCharArray[i] = allChars[i - key];
                 }
             }
             replace(readChars, newCharArray);
-            print(readChars);
+            ulti.print(mode,readChars);
         }
     }
 
-    public void decrypWithKey(int key) {
+    public void decryptWithKey(int key) {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
 
@@ -154,20 +154,20 @@ public class Ceasar {
         // Make set CharArray based on user key
         char[] newCharArray = new char[allChars.length];
         for (int i = 0; i < allChars.length; i++) {
-            // Moving to the left
-            // D E A B C
-            // A B C D E : key = 2
-            if (i - key < 0) {
-                newCharArray[i] = allChars[allChars.length + i - key];
+            // Moving to the right
+            // A B C D E
+            // D E A B C : Key = 2
+            if (i + key < allChars.length) {
+                newCharArray[i] = allChars[i + key];
             } else {
-                newCharArray[i] = allChars[i - key];
+                newCharArray[i] = allChars[(i + key) - allChars.length];
             }
         }
         replace(readChars, newCharArray);
-        print(readChars);
+        ulti.print(mode,readChars);
     }
 
-    public void decrypWithoutKey() {
+    public void decryptWithoutKey() {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
 
@@ -193,14 +193,14 @@ public class Ceasar {
 
             char[] newCharArray = new char[allChars.length];
 
-            // Moving to the left one by one still the end of allChars length
-            // D E A B C
-            // A B C D E : key = 2
+            // Moving to the right one by one still the end of allChars length
+            // A B C D E
+            // D E A B C : Key = 2
             for (int i = 0; i < allChars.length; i++) {
-                if (i - key < 0) {
-                    newCharArray[i] = allChars[allChars.length + i - key];
+                if (i + key < allChars.length) {
+                    newCharArray[i] = allChars[i + key];
                 } else {
-                    newCharArray[i] = allChars[i - key];
+                    newCharArray[i] = allChars[(i + key) - allChars.length];
                 }
             }
 
@@ -231,27 +231,11 @@ public class Ceasar {
         }
     }
 
-    public void print(ArrayList<Character> readChars) {
-        // print Encrypted file
-        switch (mode) {
-            case 1:
-                System.out.print("\nEncrypted:\n");
-                break;
-            case 2:
-                System.out.print("\nDecrypted:\n");
-                break;
-        }
-        for (char c : readChars) {
-            System.out.print(c);
-        }
-        System.out.println("\nDone.");
-    }
-
     public void writeToFile(int key, ArrayList<Character> readChars, String name, char[] newCharArray) {
         // get file's name        
         try {
             // Write to File
-            
+
             // Remove old file when starting test
             if (key == 1) {
                 try (
@@ -262,9 +246,7 @@ public class Ceasar {
                     }
                     writer.println("\n");
                 }
-            } 
-            
-            // Adding more key during test
+            } // Adding more key during test
             else {
                 try (
                         PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(name + "PossibleDecrypt.txt", true)))) {

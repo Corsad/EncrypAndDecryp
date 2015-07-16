@@ -22,6 +22,8 @@ public class Ulti {
                         , ';', '(', ')', '-', '!', '?', '$', '\'', '"', '\n'
                         , '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
+//    private char [] allChars = {'A', 'B', 'C'};
+    
     // getter for allChars
     public char[] getAllChars() {
         return allChars;
@@ -89,7 +91,7 @@ public class Ulti {
             while (line != null) {
                 // put char into array
                 for (char c : line.toCharArray()) {
-                    chars.add(c);
+                        chars.add(c);
                 }
                 line = lines.readLine();
                 
@@ -108,5 +110,21 @@ public class Ulti {
         char temp = charArray.get(firstPos);
         charArray.set(firstPos, charArray.get(secPos));
         charArray.set(secPos, temp);
+    }
+    
+    public void print(int mode ,ArrayList<Character> readChars) {
+        // print Encrypted file
+        switch (mode) {
+            case 1:
+                System.out.print("\nEncrypted:\n");
+                break;
+            case 2:
+                System.out.print("\nDecrypted:\n");
+                break;
+        }
+        for (char c : readChars) {
+            System.out.print(c);
+        }
+        System.out.println("\nDone.");
     }
 }
