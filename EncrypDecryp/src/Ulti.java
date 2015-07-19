@@ -116,15 +116,15 @@ public class Ulti {
         // print Encrypted file
         switch (mode) {
             case 1:
-                System.out.print("\nEncrypted:\n");
+                System.out.print("\nEncrypted:\n>");
                 break;
             case 2:
-                System.out.print("\nDecrypted:\n");
+                System.out.print("\nDecrypted:\n>");
                 break;
         }
         for (char c : readChars) {
             System.out.print(c);
         }
-        System.out.println("\nDone.");
+        System.out.print("<\nDone.");
     }
 }

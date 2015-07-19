@@ -148,11 +148,11 @@ public class Subst {
         ArrayList<Character> readChars = ulti.readFile(filePath);
         ArrayList<Character> keyArray = ulti.readFile(keyPath);
 
-        System.out.println("Read from File: ");
+        System.out.print("Read from File: \n>");
         for (char c : readChars) {
             System.out.print(c);
         }
-        System.out.println("");
+        System.out.print("<\n");
 
         if (keyArray.size() != allChars.length) {
             System.out.println("The amount of char inside key file is not equal with the total given chars");
@@ -172,6 +172,12 @@ public class Subst {
         ArrayList<Character> readChars = ulti.readFile(filePath);
         ArrayList<Character> keyArray = ulti.readFile(keyPath);
 
+        System.out.print("Read from File: \n>");
+        for (char c : readChars) {
+            System.out.print(c);
+        }
+        System.out.print("<\n");
+        
         if (keyArray.size() != allChars.length) {
             System.out.println("The amount of char inside key file is not equal with the total given chars");
         } else {
@@ -324,12 +330,12 @@ public class Subst {
                     for (char c : keyArray) {
                         writer.print(c);
                     }
-                    writer.print("\nDecrypt: \n");
+                    writer.print("\nDecrypt: \n>");
                     for (char c : readArray) {
                         writer.print(c);
                     }
 
-                    writer.print("\n\n");
+                    writer.print("<\n\n");
                 }
 
                 overwriteFile = false;
@@ -340,12 +346,12 @@ public class Subst {
                     for (char c : keyArray) {
                         writer.print(c);
                     }
-                    writer.print("\nDecrypt: \n");
+                    writer.print("\nDecrypt: \n>");
                     for (char c : readArray) {
                         writer.print(c);
                     }
 
-                    writer.print("\n\n");
+                    writer.print("<\n\n");
                 }
             }
             // Write to File

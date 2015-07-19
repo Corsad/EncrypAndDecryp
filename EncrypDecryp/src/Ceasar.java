@@ -113,14 +113,14 @@ public class Ceasar {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
 
-        System.out.println("Read from File: ");
+        System.out.print("Read from File: \n>");
         for (char c : readChars) {
             System.out.print(c);
         }
-        System.out.println("");
+        System.out.print("<\n");
 
         // Check if user key input is larger than the amount of word
-        if (allChars.length <= key) {
+        if (allChars.length < key) {
             System.out.println("Key is larger than the amount of character");
         } else {
 
@@ -137,7 +137,7 @@ public class Ceasar {
                 }
             }
             replace(readChars, newCharArray);
-            ulti.print(mode,readChars);
+            ulti.print(mode, readChars);
         }
     }
 
@@ -145,36 +145,41 @@ public class Ceasar {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
 
-        System.out.println("Read from File: ");
+        System.out.print("Read from File: \n>");
         for (char c : readChars) {
             System.out.print(c);
         }
+        System.out.print("<\n");
 
-        // Not checking for key and file size
         // Make set CharArray based on user key
-        char[] newCharArray = new char[allChars.length];
-        for (int i = 0; i < allChars.length; i++) {
+        if (allChars.length < key) {
+            System.out.println("Key is larger than the amount of character");
+        } else {
+            char[] newCharArray = new char[allChars.length];
+            for (int i = 0; i < allChars.length; i++) {
             // Moving to the right
-            // A B C D E
-            // D E A B C : Key = 2
-            if (i + key < allChars.length) {
-                newCharArray[i] = allChars[i + key];
-            } else {
-                newCharArray[i] = allChars[(i + key) - allChars.length];
+                // A B C D E
+                // D E A B C : Key = 2
+                if (i + key < allChars.length) {
+                    newCharArray[i] = allChars[i + key];
+                } else {
+                    newCharArray[i] = allChars[(i + key) - allChars.length];
+                }
             }
+            replace(readChars, newCharArray);
+            ulti.print(mode, readChars);
         }
-        replace(readChars, newCharArray);
-        ulti.print(mode,readChars);
     }
 
     public void decryptWithoutKey() {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
 
-        System.out.println("Read from File: ");
+        System.out.print("Read from File: \n>");
         for (char c : readChars) {
             System.out.print(c);
         }
+        System.out.print("<\n");
 
         // get file name
         File file = new File(filePath);
@@ -182,7 +187,7 @@ public class Ceasar {
 
         // Create clone Array to run all test without changing readChars Array
         ArrayList<Character> clone;
-
+        
         // Not checking for key and file size
         // Make set CharArray based on user key
         for (int key = 1; key < allChars.length; key++) {
@@ -240,21 +245,21 @@ public class Ceasar {
             if (key == 1) {
                 try (
                         PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(name + "PossibleDecrypt.txt", false)))) {
-                    writer.println("Key: " + key);
+                    writer.print("Key: " + key + "\n>");
                     for (char c : readChars) {
                         writer.print(c);
                     }
-                    writer.println("\n");
+                    writer.println("<\n");
                 }
             } // Adding more key during test
             else {
                 try (
                         PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(name + "PossibleDecrypt.txt", true)))) {
-                    writer.println("Key: " + key);
+                    writer.print("Key: " + key + "\n>");
                     for (char c : readChars) {
                         writer.print(c);
                     }
-                    writer.println("\n");
+                    writer.println("<\n");
                 }
             }
         } catch (FileNotFoundException ex) {
