@@ -129,11 +129,11 @@ public class Ceasar {
             for (int i = 0; i < allChars.length; i++) {
                 // Moving to the left
                 // A B C D E
-                // C D E A B : key = 2
-                if (i - key < 0) {
-                    newCharArray[i] = allChars[allChars.length + i - key];
+                // C D E A B : key = 2                
+                if (i + key < allChars.length) {
+                    newCharArray[i] = allChars[i + key];
                 } else {
-                    newCharArray[i] = allChars[i - key];
+                    newCharArray[i] = allChars[(i + key) - allChars.length];
                 }
             }
             replace(readChars, newCharArray);
@@ -160,10 +160,10 @@ public class Ceasar {
             // Moving to the right
                 // A B C D E
                 // D E A B C : Key = 2
-                if (i + key < allChars.length) {
-                    newCharArray[i] = allChars[i + key];
+                if (i - key < 0) {
+                    newCharArray[i] = allChars[allChars.length + i - key];
                 } else {
-                    newCharArray[i] = allChars[(i + key) - allChars.length];
+                    newCharArray[i] = allChars[i - key];
                 }
             }
             replace(readChars, newCharArray);
@@ -202,10 +202,10 @@ public class Ceasar {
             // A B C D E
             // D E A B C : Key = 2
             for (int i = 0; i < allChars.length; i++) {
-                if (i + key < allChars.length) {
-                    newCharArray[i] = allChars[i + key];
+               if (i - key < 0) {
+                    newCharArray[i] = allChars[allChars.length + i - key];
                 } else {
-                    newCharArray[i] = allChars[(i + key) - allChars.length];
+                    newCharArray[i] = allChars[i - key];
                 }
             }
 
@@ -269,6 +269,5 @@ public class Ceasar {
         } catch (IOException ex) {
             Logger.getLogger(Ceasar.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 }
