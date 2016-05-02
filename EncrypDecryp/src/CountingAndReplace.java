@@ -87,7 +87,13 @@ public class CountingAndReplace {
         System.out.println("5. Quit");
         System.out.print("\nEnter your choice: ");
 
+        try{
         choice = scanner.nextByte();
+        }catch(Exception e){
+            System.out.println("Not a choice");
+            choice = 0;
+            scanner.nextLine();
+        }
     }
 
     public void printCurrentArray() {
@@ -102,17 +108,35 @@ public class CountingAndReplace {
         scanner.nextLine();
         char replacedChar, charReplacedWith;
 
-        System.out.print("Replace char: ");
+        System.out.print("Replace char ('n' for new line): ");
         replacedChar = getStringAndTurnToChar();
 
-        System.out.print("Replaced with char: ");
+        System.out.print("Replaced with char ('n' for new line): ");
         charReplacedWith = getStringAndTurnToChar();
 
-        for (int i = 0; i < currentArray.size(); i++) {
-            if (Character.toUpperCase(currentArray.get(i)) == replacedChar || Character.toLowerCase(currentArray.get(i)) == replacedChar) {
-                currentArray.set(i, charReplacedWith);
-            } else if (Character.toUpperCase(currentArray.get(i)) == charReplacedWith || Character.toLowerCase(currentArray.get(i)) == charReplacedWith) {
-                currentArray.set(i, replacedChar);
+        if (replacedChar == 'n') {
+            for (int i = 0; i < currentArray.size(); i++) {
+                if (currentArray.get(i) == '\n') {
+                    currentArray.set(i, charReplacedWith);
+                } else if (currentArray.get(i) == charReplacedWith) {
+                    currentArray.set(i, '\n');
+                }
+            }
+        } else if (charReplacedWith == 'n') {
+            for (int i = 0; i < currentArray.size(); i++) {
+                if (currentArray.get(i) == replacedChar) {
+                    currentArray.set(i, '\n');
+                } else if (currentArray.get(i) == '\n') {
+                    currentArray.set(i, replacedChar);
+                }
+            }
+        } else {
+            for (int i = 0; i < currentArray.size(); i++) {
+                if (Character.toUpperCase(currentArray.get(i)) == replacedChar || Character.toLowerCase(currentArray.get(i)) == replacedChar) {
+                    currentArray.set(i, charReplacedWith);
+                } else if (Character.toUpperCase(currentArray.get(i)) == charReplacedWith || Character.toLowerCase(currentArray.get(i)) == charReplacedWith) {
+                    currentArray.set(i, replacedChar);
+                }
             }
         }
 
@@ -142,7 +166,7 @@ public class CountingAndReplace {
         TreeMap<Character, Integer> sortedMap = SortByValue(map);
 
         for (Map.Entry<Character, Integer> entry : sortedMap.entrySet()) {
-            System.out.println( "'"+ entry.getKey() + "' : " + entry.getValue());
+            System.out.println("'" + entry.getKey() + "' : " + entry.getValue());
         }
         System.out.println("");
     }

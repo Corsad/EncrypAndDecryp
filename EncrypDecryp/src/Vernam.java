@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  *
  * @author <S3372771>
@@ -25,6 +26,7 @@ public class Vernam {
     private boolean hasError = false;
     private Ulti ulti;
     char[] allChars;
+    boolean overwriteFile = true;
 
     public static void main(String[] args) {
         Vernam vernam = new Vernam();
@@ -50,7 +52,11 @@ public class Vernam {
                         break;
                     // mode decryp
                     case 2:
-                        decrypt();
+                        if (args.length == 4) {
+                            decrypt(false);
+                        } else {
+                            decryptWithoutKey();
+                        }
                         break;
                     // generate
                     case 3:
@@ -67,10 +73,10 @@ public class Vernam {
         mode = ulti.checkEorDorG(args[0]);
 
         filePath = args[1];
-        
+
         if (mode != 3) {
             fileExist = ulti.checkExistFile(filePath);
-            
+
             keyPath = args[2];
             keyExist = ulti.checkExistFile(filePath);
 
@@ -80,9 +86,9 @@ public class Vernam {
             } else {
                 key = 0;
             }
-        } else {     
+        } else {
             fileExist = 1;
-            
+
             keyExist = ulti.checkIsInteger(args[2]);
             if (keyExist == 1) {
                 key = Integer.parseInt(args[2]);
@@ -174,17 +180,19 @@ public class Vernam {
         }
     }
 
-    public void decrypt() {
+    public void decrypt(boolean print) {
         // Read file from user input
         ArrayList<Character> readChars = ulti.readFile(filePath);
         ArrayList<Character> keyChars = ulti.readFile(keyPath);
 
-        System.out.print("Read from File: \n>");
-        for (char c : readChars) {
-            System.out.print(c);
+        if (!print) {
+            System.out.print("Read from File: \n>");
+            for (char c : readChars) {
+                System.out.print(c);
+            }
+            System.out.print("<\n");
         }
-        System.out.print("<\n");
-
+        
         // Key should be equal or bigger than file
         // (keyChars.size() - key) : get key with offset
         if (readChars.size() <= (keyChars.size() - key)) {
@@ -196,7 +204,7 @@ public class Vernam {
             for (int c : inputAsIntArray) {
                 encryptedArray.add(c);
             }
-            
+
             for (int i = 0; i < inputAsIntArray.size(); i++) {
                 encryptedArray.set(i, inputAsIntArray.get(i) - keyAsIntArray.get(i + key));
 
@@ -205,8 +213,13 @@ public class Vernam {
                 }
 
             }
-
-            ulti.print(mode, turnIntToCharArray(encryptedArray));
+            
+            if(!print){
+                ulti.print(mode, turnIntToCharArray(encryptedArray));
+            } else {
+                writeAllPossibleDecrypt(key, turnIntToCharArray(encryptedArray));
+            }
+            
         } else {
             System.out.println("Key is too short.");
         }
@@ -214,22 +227,22 @@ public class Vernam {
 
     public void generateKey() {
         ArrayList<Character> keyArray = new ArrayList<Character>();
-        
+
         ArrayList<Character> clone = new ArrayList<Character>();
         for (int i = 0; i < allChars.length; i++) {
             clone.add(allChars[i]);
         }
-        
-        for(int i = 0; i < key; i++){
+
+        for (int i = 0; i < key; i++) {
             long seed = System.nanoTime();
             Collections.shuffle(clone, new Random(seed));
             keyArray.add(clone.get(0));
         }
-        
+
         writeGeneratekey(keyArray);
         System.out.println("\nWrite to file: " + filePath);
     }
-    
+
     public void writeGeneratekey(ArrayList<Character> keyArray) {
         // get file's name        
         try {
@@ -240,6 +253,58 @@ public class Vernam {
                     writer.print(c);
                 }
             }
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Ceasar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Ceasar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void decryptWithoutKey() {
+        ArrayList<Character> readChars = ulti.readFile(filePath);
+        ArrayList<Character> keyChars = ulti.readFile(keyPath);
+        if (readChars.size() <= (keyChars.size() - key)) {
+            for (int i = 0; i < keyChars.size() - readChars.size(); i++) {
+                key = i;
+                decrypt(true);
+            }
+        } else {
+            System.out.println("Key is too short.");
+        }
+
+        System.out.println("\nWrite to file: " + filePath + "PossibleDecrypt.txt");
+    }
+
+    public void writeAllPossibleDecrypt(int key, ArrayList<Character> readArray) {
+        // get file's name        
+        try {
+            if (overwriteFile) {
+                try (
+                        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(filePath + "PossibleDecrypt.txt", false)))) {
+                    writer.println("Key: " + key);
+                    writer.print("\nDecrypt: \n>");
+                    for (char c : readArray) {
+                        writer.print(c);
+                    }
+
+                    writer.print("<\n\n");
+                }
+
+                overwriteFile = false;
+            } else {
+                try (
+                        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(filePath + "PossibleDecrypt.txt", true)))) {
+                    writer.println("Key: " + key);
+                    writer.print("\nDecrypt: \n>");
+                    for (char c : readArray) {
+                        writer.print(c);
+                    }
+
+                    writer.print("<\n\n");
+                }
+            }
+            // Write to File
+
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Ceasar.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
